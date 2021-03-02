@@ -3,7 +3,7 @@ var playerName = window.prompt("What is your robot's name?");
 var playerHealth = 100;
 var playerAttack = 10;
 var playerMoney = 10;
-console.log("Robot name: " + playerName, "Robot health: " + 
+console.log("Robot name: " + playerName, "Robot health: " +
     playerHealth, "Robot attack power: " + playerAttack, "Player Money: " + playerMoney);
 
 var enemyNames = ['Roborto', 'Amy Android', 'Robo Trumble'];
@@ -32,6 +32,17 @@ var startGame = function () {
 
             // pass the pickedEnemyName variable's value into the fight function, where it will assume the value of the enemyName parameter
             fight(pickedEnemyName);
+
+            // if player is still alive and we're not at the last enemy in the array
+            if (playerHealth > 0 && i < enemyNames.length - 1) {
+                // ask if player wants to use the store before next round
+                var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+
+                // if yes, take them to the store() function
+                if (storeConfirm) {
+                    shop();
+                }
+            }
         }
         // if player is not alive, break out of the loop and let endGame function run
         else {
@@ -49,7 +60,7 @@ var endGame = function () {
 
     // if player is still alive, player wins!
     if (playerHealth > 0) {
-        window.alert("Great job, you've survived the game! You now have a score of" + playerMoney + '.');
+        window.alert("Great job, you've survived the game! You now have a score of " + playerMoney + '.');
     } else {
         window.alert(playerName + " has lost in battle! Game Over!");
     }
@@ -77,10 +88,16 @@ var fight = function (enemyName) {
 
             // if yes (true), leave fight
             if (confirmSkip) {
-                window.alert(playerName + ' has decided to skip this fight. Goodbye!');
+                window.alert(playerName + ' has decided to skip this fight!');
                 // subtract money from playerMoney for skipping
                 playerMoney = playerMoney - 10;
-                shop();
+                // ask if player wants to use the store before next round
+                var storeConfirm = window.confirm("Visit the store before the next round?");
+
+                // if yes, take them to the store() function
+                if (storeConfirm) {
+                    shop();
+                }
                 break;
             }
         }
@@ -138,20 +155,32 @@ var shop = function () {
 
     // use switch case to carry out action
     switch (shopOptionPrompt) {
-        case 'refill':
-        case 'REFILL':
+        case "refill":
+        case "REFILL":
+            if (playerMoney >= 7) {
             window.alert("Refilling player's health by 20 for 7 dollars.");
-            playerHealth += 20;
-            playerMoney -= 7;
+            playerHealth = playerHealth + 20;
+            playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+
             break;
-        case 'upgrade':
-        case 'UPGRADE':
+        case "upgrade":
+        case "UPGRADE":
+            if (playerMoney >= 7) {
             window.alert("Upgrading player's attack by 6 for 7 dollars.");
-            playerAttack += 6;
-            playerMoney -= 7;
+            playerAttack = playerAttack + 6;
+            playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+
             break;
-        case 'leave':
-        case 'LEAVE':
+        case "leave":
+        case "LEAVE":
             window.alert('Leaving the store.');
             break;
         default:
